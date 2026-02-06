@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+
 <html>
 <head>
-<title>For Ankita 🌹</title>
+<title>Rose Day Surprise 🌹</title>
 
 <style>
 body{
@@ -9,25 +9,15 @@ body{
   height:100vh;
   font-family:'Poppins',sans-serif;
   background:linear-gradient(135deg,#ff758c,#ffb199);
+  overflow:hidden;
   display:flex;
   justify-content:center;
   align-items:center;
-  overflow:hidden;
-  color:white;
   text-align:center;
+  color:white;
 }
 
-/* falling roses */
-.rose{
-  position:absolute;
-  animation:fall linear infinite;
-}
-@keyframes fall{
-  from{transform:translateY(-10vh);}
-  to{transform:translateY(110vh);}
-}
-
-/* intro */
+/* intro screen */
 #intro{
   position:absolute;
   width:100%;
@@ -42,41 +32,109 @@ body{
 /* card */
 .box{
   display:none;
-  background:rgba(0,0,0,0.65);
+  background:rgba(0,0,0,0.6);
   padding:35px;
   border-radius:25px;
   max-width:420px;
 }
 
-/* bounce */
-.bounce{
+/* falling roses */
+.rose{
+  position:absolute;
+  animation:fall linear infinite;
+}
+
+@keyframes fall{
+  from{transform:translateY(-10vh);}
+  to{transform:translateY(110vh);}
+}
+
+/* sparkles */
+.spark{
+  position:absolute;
+  color:#fff;
+  animation:twinkle 2s infinite;
+}
+
+@keyframes twinkle{
+  50%{opacity:0.2;}
+}
+
+/* envelope */
+#envelope{
+  font-size:70px;
+  cursor:pointer;
+  display:none;
   animation:bounce 1.2s infinite;
 }
+
 @keyframes bounce{
   50%{transform:translateY(-10px);}
 }
 
-.fade{animation:fade 1s;}
+.fade{animation:fade 1.5s;}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 </style>
 </head>
 
 <body>
 
-<div id="intro">🌹 Tap to open your surprise 🌹</div>
+<div id="intro">🌹 Tap to open your Rose Day surprise 🌹</div>
 
+<!-- Romantic music -->
 <audio id="music" loop>
-<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+<source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3">
 </audio>
 
-<div class="box" id="mainBox">
+<div class="box" id="box">
   <h2 id="text"></h2>
+  <h2 id="countdown"></h2>
+  <div id="envelope">💌</div>
 </div>
 
 <script>
 
-/* falling roses */
-for(let j=0;j<40;j++){
+/* start */
+document.getElementById("intro").onclick=function(){
+  this.style.display="none";
+  document.getElementById("box").style.display="block";
+  document.getElementById("music").play();
+}
+
+/* typing letter */
+const msg =
+"Happy Rose Day Ankita 🌹❤️\n\nSome people give roses…\nBut I wanted to give you something special.\nBecause you are the most special part of my life.\n\nWait for your surprise...";
+
+let i=0;
+function type(){
+  if(i<msg.length){
+    document.getElementById("text").innerHTML+=msg.charAt(i);
+    i++;
+    setTimeout(type,35);
+  } else {
+    startCountdown();
+  }
+}
+type();
+
+/* countdown */
+function startCountdown(){
+  let c=3;
+  let el=document.getElementById("countdown");
+
+  let timer=setInterval(()=>{
+    el.innerHTML=c;
+    c--;
+    if(c<0){
+      clearInterval(timer);
+      el.innerHTML="Open it ❤️";
+      document.getElementById("envelope").style.display="block";
+    }
+  },800);
+}
+
+/* roses */
+for(let j=0;j<35;j++){
   let r=document.createElement("div");
   r.innerHTML="🌹";
   r.className="rose";
@@ -86,90 +144,32 @@ for(let j=0;j<40;j++){
   document.body.appendChild(r);
 }
 
-const box=document.getElementById("mainBox");
-
-/* start */
-document.getElementById("intro").onclick=function(){
-  this.style.display="none";
-  box.style.display="block";
-  document.getElementById("music").play();
-  typeLetter();
+/* sparkles */
+for(let s=0;s<25;s++){
+  let sp=document.createElement("div");
+  sp.innerHTML="✨";
+  sp.className="spark";
+  sp.style.left=Math.random()*100+"vw";
+  sp.style.top=Math.random()*100+"vh";
+  document.body.appendChild(sp);
 }
 
-/* typing message */
-const msg =
-"Happy Rose Day Ankita ❤️\n\nI didn’t want to just send a flower…\nI wanted to send something special…";
-
-let i=0;
-function typeLetter(){
-  if(i<msg.length){
-    document.getElementById("text").innerHTML+=msg.charAt(i);
-    i++;
-    setTimeout(typeLetter,35);
-  }else{
-    setTimeout(showReasons,1200);
-  }
-}
-
-/* suspense + reasons */
-function showReasons(){
-  box.innerHTML="<h2>Wait... there's more 💕</h2>";
-  
-  setTimeout(()=>{
-    const reasons=[
-      "Your smile makes my day ☀️",
-      "You understand me 🤍",
-      "You make me laugh 😂",
-      "You care so much 💗",
-      "You are my comfort 🫶",
-      "You support my dreams 🌟",
-      "You look cutest when angry 😝",
-      "You are my best friend 💕",
-      "Life feels easy with you 🌈",
-      "I just love YOU ❤️"
-    ];
-
-    let idx=0;
-    box.innerHTML="<h2 id='r'></h2>";
-
-    function show(){
-      if(idx<reasons.length){
-        document.getElementById("r").innerHTML=reasons[idx];
-        idx++;
-        setTimeout(show,900);
-      }else{
-        showGift();
-      }
-    }
-    show();
-
-  },1000);
-}
-
-/* gift */
-function showGift(){
-  box.innerHTML=`
-  <h2>Open your gift 🎁</h2>
-  <div id="gift" class="bounce" style="font-size:70px;cursor:pointer">🎁</div>
+/* final surprise */
+document.getElementById("envelope").onclick=function(){
+  document.body.innerHTML=`
+  <div class="fade" style="padding:30px">
+    <h1 style="font-size:40px">For You Ankita ❤️</h1>
+    <p style="font-size:20px">
+      You are my today, tomorrow and forever 🌹<br>
+      Thank you for being my happiness.
+    </p>
+    <h2>Forever yours,<br>Nitish 💍</h2>
+    <br>
+    <img src="https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif" width="260">
+  </div>
   `;
-
-  document.getElementById("gift").onclick=function(){
-    document.body.innerHTML=`
-    <div class="fade" style="padding:30px">
-      <h1 style="font-size:42px">For You Ankita ❤️</h1>
-      <p style="font-size:20px">
-      Thank you for being my happiness,<br>
-      my peace, my forever person 🌹
-      </p>
-      <h2>Forever yours,<br>Nitish 💍</h2>
-      <br>
-      <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" width="260">
-    </div>
-    `;
-  }
 }
-
 </script>
+
 </body>
 </html>
-# rose_for_you
