@@ -10,11 +10,11 @@ body{
   font-family:'Poppins',sans-serif;
   background:linear-gradient(135deg,#ff758c,#ffb199);
   overflow:hidden;
-  color:white;
   display:flex;
   justify-content:center;
   align-items:center;
   text-align:center;
+  color:white;
 }
 
 /* intro */
@@ -33,15 +33,14 @@ body{
 .box{
   display:none;
   background:rgba(0,0,0,0.6);
-  padding:35px;
+  padding:30px;
   border-radius:25px;
   max-width:420px;
 }
 
-/* roses */
+/* falling roses */
 .rose{
   position:absolute;
-  font-size:22px;
   animation:fall linear infinite;
 }
 @keyframes fall{
@@ -56,23 +55,34 @@ body{
 }
 @keyframes twinkle{50%{opacity:0.2;}}
 
-/* heart task */
+/* buttons */
+button{
+  padding:12px 22px;
+  margin:10px;
+  border:none;
+  border-radius:12px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.primary{background:#ff4d6d;color:white;}
+.secondary{background:#bbb;position:absolute;}
+
+/* heart pulse */
 #heart{
   font-size:70px;
   cursor:pointer;
   animation:pulse 1s infinite;
 }
-@keyframes pulse{
-  50%{transform:scale(1.2);}
+@keyframes pulse{50%{transform:scale(1.2);}}
+
+/* moving rose */
+#moveRose{
+  font-size:50px;
+  cursor:pointer;
+  position:absolute;
 }
 
-/* rose drag */
-#finalRose{
-  font-size:70px;
-  cursor:grab;
-}
-
-/* fade */
 .fade{animation:fade 1.5s;}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 </style>
@@ -87,7 +97,7 @@ body{
 </audio>
 
 <div class="box" id="box">
-  <h2 id="text"></h2>
+  <h3 id="text"></h3>
   <div id="task"></div>
 </div>
 
@@ -101,21 +111,21 @@ intro.onclick=()=>{
   type();
 };
 
-/* typing letter */
-const msg=
-"Happy Rose Day Ankita 🌹❤️\n\nBefore I give you your rose…\nI have something fun for you 😌\n\nComplete the tasks below 👇";
+/* typing message */
+const msg =
+"Happy Rose Day Ankita 🌹❤️\n\nI made something special for you.\nBut first… complete my little challenges 😄";
 
 let i=0;
 function type(){
   if(i<msg.length){
     text.innerHTML+=msg.charAt(i++);
-    setTimeout(type,35);
+    setTimeout(type,30);
   } else {
     heartTask();
   }
 }
 
-/* falling roses + sparkles */
+/* background animation */
 for(let j=0;j<30;j++){
   let r=document.createElement("div");
   r.innerHTML="🌹";
@@ -133,43 +143,61 @@ for(let s=0;s<20;s++){
   document.body.appendChild(sp);
 }
 
-/* TASK 1 */
+/* TASK 1 - tap heart */
 let taps=0;
 function heartTask(){
-  task.innerHTML=`
-    <p>💖 Task 1: Tap the heart 3 times 💖</p>
-    <div id="heart">❤️</div>
-  `;
+  task.innerHTML="<p>💖 Tap the heart 3 times</p><div id='heart'>❤️</div>";
   heart.onclick=()=>{
     taps++;
-    if(taps===3) roseTask();
+    if(taps===3) movingRoseTask();
+  }
+}
+
+/* TASK 2 - catch rose */
+function movingRoseTask(){
+  task.innerHTML="<p>🌹 Catch the rose 😆</p><div id='moveRose'>🌹</div>";
+
+  const r=document.getElementById("moveRose");
+
+  r.onmouseover=()=>{
+    r.style.top=Math.random()*window.innerHeight+"px";
+    r.style.left=Math.random()*window.innerWidth+"px";
   };
+
+  r.onclick=buttonStage;
 }
 
-/* TASK 2 */
-function roseTask(){
+/* buttons stage */
+function buttonStage(){
   task.innerHTML=`
-    <p>🌹 Task 2: Drag the rose to your heart 🌹</p>
-    <div id="finalRose" draggable="true">🌹</div>
+  <p>Ready for your gift? 🎁</p>
+  <button class="primary" id="open">Open your gift ❤️</button>
+  <button class="secondary" id="later">Not now 🙈</button>
   `;
-  finalRose.ondragend=finalSurprise;
+
+  later.onmouseover=()=>{
+    later.style.top=Math.random()*window.innerHeight+"px";
+    later.style.left=Math.random()*window.innerWidth+"px";
+  };
+
+  open.onclick=finalSurprise;
 }
 
-/* FINAL */
+/* FINAL PROPOSAL */
 function finalSurprise(){
   document.body.innerHTML=`
   <div class="fade" style="padding:30px">
-    <h1 style="font-size:42px">🌹 Happy Rose Day Ankita 🌹</h1>
-    <p style="font-size:20px">
-      This rose is not just a flower…<br>
-      It’s my love, my respect, my promise.
-    </p>
-    <h2>Will you accept this rose<br>and be my forever? 💍</h2>
-    <h3>— Nitish ❤️</h3>
-    <img src="https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif" width="260">
+    <h1 style="font-size:40px">🌹 For Ankita 🌹</h1>
+    <h2>You are my today, tomorrow & forever ❤️</h2>
+    <p>This rose carries my whole heart.</p>
+    <h2>Will you stay with me forever? 💍</h2>
+    <h3>— Nitish</h3>
+    <br>
+    <img src="https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif" width="260">
   </div>
   `;
 }
+
 </script>
 
 </body>
