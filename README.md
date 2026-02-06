@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html>
 <head>
 <title>Rose Day Surprise 🌹</title>
@@ -10,14 +10,14 @@ body{
   font-family:'Poppins',sans-serif;
   background:linear-gradient(135deg,#ff758c,#ffb199);
   overflow:hidden;
+  color:white;
   display:flex;
   justify-content:center;
   align-items:center;
   text-align:center;
-  color:white;
 }
 
-/* intro screen */
+/* intro */
 #intro{
   position:absolute;
   width:100%;
@@ -38,40 +38,41 @@ body{
   max-width:420px;
 }
 
-/* falling roses */
+/* roses */
 .rose{
   position:absolute;
+  font-size:22px;
   animation:fall linear infinite;
 }
-
 @keyframes fall{
   from{transform:translateY(-10vh);}
   to{transform:translateY(110vh);}
 }
 
-/* sparkles */
+/* sparkle */
 .spark{
   position:absolute;
-  color:#fff;
   animation:twinkle 2s infinite;
 }
+@keyframes twinkle{50%{opacity:0.2;}}
 
-@keyframes twinkle{
-  50%{opacity:0.2;}
-}
-
-/* envelope */
-#envelope{
+/* heart task */
+#heart{
   font-size:70px;
   cursor:pointer;
-  display:none;
-  animation:bounce 1.2s infinite;
+  animation:pulse 1s infinite;
+}
+@keyframes pulse{
+  50%{transform:scale(1.2);}
 }
 
-@keyframes bounce{
-  50%{transform:translateY(-10px);}
+/* rose drag */
+#finalRose{
+  font-size:70px;
+  cursor:grab;
 }
 
+/* fade */
 .fade{animation:fade 1.5s;}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 </style>
@@ -79,73 +80,51 @@ body{
 
 <body>
 
-<div id="intro">🌹 Tap to open your Rose Day surprise 🌹</div>
+<div id="intro">🌹 Tap to start your Rose Day surprise 🌹</div>
 
-<!-- Romantic music -->
 <audio id="music" loop>
 <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3">
 </audio>
 
 <div class="box" id="box">
   <h2 id="text"></h2>
-  <h2 id="countdown"></h2>
-  <div id="envelope">💌</div>
+  <div id="task"></div>
 </div>
 
 <script>
 
 /* start */
-document.getElementById("intro").onclick=function(){
-  this.style.display="none";
-  document.getElementById("box").style.display="block";
-  document.getElementById("music").play();
-}
+intro.onclick=()=>{
+  intro.style.display="none";
+  box.style.display="block";
+  music.play();
+  type();
+};
 
 /* typing letter */
-const msg =
-"Happy Rose Day Ankita 🌹❤️\n\nSome people give roses…\nBut I wanted to give you something special.\nBecause you are the most special part of my life.\n\nWait for your surprise...";
+const msg=
+"Happy Rose Day Ankita 🌹❤️\n\nBefore I give you your rose…\nI have something fun for you 😌\n\nComplete the tasks below 👇";
 
 let i=0;
 function type(){
   if(i<msg.length){
-    document.getElementById("text").innerHTML+=msg.charAt(i);
-    i++;
+    text.innerHTML+=msg.charAt(i++);
     setTimeout(type,35);
   } else {
-    startCountdown();
+    heartTask();
   }
 }
-type();
 
-/* countdown */
-function startCountdown(){
-  let c=3;
-  let el=document.getElementById("countdown");
-
-  let timer=setInterval(()=>{
-    el.innerHTML=c;
-    c--;
-    if(c<0){
-      clearInterval(timer);
-      el.innerHTML="Open it ❤️";
-      document.getElementById("envelope").style.display="block";
-    }
-  },800);
-}
-
-/* roses */
-for(let j=0;j<35;j++){
+/* falling roses + sparkles */
+for(let j=0;j<30;j++){
   let r=document.createElement("div");
   r.innerHTML="🌹";
   r.className="rose";
   r.style.left=Math.random()*100+"vw";
-  r.style.fontSize=(15+Math.random()*20)+"px";
   r.style.animationDuration=(3+Math.random()*5)+"s";
   document.body.appendChild(r);
 }
-
-/* sparkles */
-for(let s=0;s<25;s++){
+for(let s=0;s<20;s++){
   let sp=document.createElement("div");
   sp.innerHTML="✨";
   sp.className="spark";
@@ -154,18 +133,40 @@ for(let s=0;s<25;s++){
   document.body.appendChild(sp);
 }
 
-/* final surprise */
-document.getElementById("envelope").onclick=function(){
+/* TASK 1 */
+let taps=0;
+function heartTask(){
+  task.innerHTML=`
+    <p>💖 Task 1: Tap the heart 3 times 💖</p>
+    <div id="heart">❤️</div>
+  `;
+  heart.onclick=()=>{
+    taps++;
+    if(taps===3) roseTask();
+  };
+}
+
+/* TASK 2 */
+function roseTask(){
+  task.innerHTML=`
+    <p>🌹 Task 2: Drag the rose to your heart 🌹</p>
+    <div id="finalRose" draggable="true">🌹</div>
+  `;
+  finalRose.ondragend=finalSurprise;
+}
+
+/* FINAL */
+function finalSurprise(){
   document.body.innerHTML=`
   <div class="fade" style="padding:30px">
-    <h1 style="font-size:40px">For You Ankita ❤️</h1>
+    <h1 style="font-size:42px">🌹 Happy Rose Day Ankita 🌹</h1>
     <p style="font-size:20px">
-      You are my today, tomorrow and forever 🌹<br>
-      Thank you for being my happiness.
+      This rose is not just a flower…<br>
+      It’s my love, my respect, my promise.
     </p>
-    <h2>Forever yours,<br>Nitish 💍</h2>
-    <br>
-    <img src="https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif" width="260">
+    <h2>Will you accept this rose<br>and be my forever? 💍</h2>
+    <h3>— Nitish ❤️</h3>
+    <img src="https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif" width="260">
   </div>
   `;
 }
